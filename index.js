@@ -6,7 +6,7 @@ canvas.height = 576
 
 c.fillRect(0, 0, canvas.width, canvas.height)
 
-const gravity = 0.2
+const gravity = 0.7
 
 class Sprite {
     constructor({position, velocity}) {
@@ -14,11 +14,25 @@ class Sprite {
       this.velocity = velocity
       this.height = 150
       this.lastkey
+      this.attackBox = {
+          position : this.position,
+          width : 100,
+          Height :50 
+      }
      }
 
      draw() {
          c.fillStyle = 'red'
         c.fillRect(this.position.x, this.position.y, 50, this.height)
+
+        // attackBox
+        c.fillStyle = "purple"
+        c.fillRect(
+        this.attackBox.position.x, 
+        this.attackBox.position.y,
+        this.attackBox.width,
+        this.attackBox.Height   
+        )
      }
 
      update() {
@@ -70,7 +84,7 @@ const keys = {
         pressed: false
     }
 
-}
+}  
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -83,17 +97,17 @@ function animate() {
     enemy.velocity.x = 0
 
     // Player Movement
-    if (keys.a.pressed && plaeyr.lastkey === 'a'){
-        player.velocity.x = -1
+    if (keys.a.pressed && player.lastkey === 'a'){
+        player.velocity.x = -5
     }else if (keys.d.pressed && player.lastkey === 'd') {
-        player.velocity.x = 1
+        player.velocity.x = 5
     }
 
     // Enemy Movement
     if (keys.ArrowLeft.pressed && enemy.lastkey === 'ArrowLeft'){
-        enemy.velocity.x = -1
+        enemy.velocity.x = -5
     }else if (keys.ArrowRight.pressed && enemy.lastkey === 'ArrowRight') {
-        enemy.velocity.x = 1
+        enemy.velocity.x = 5
     }
 }
 
@@ -110,7 +124,7 @@ window.addEventListener('keydown', (event) => {
        player.lastkey = 'a'
       break
       case 'w':
-       player.velocity.y = -10
+       player.velocity.y = -15
       break
 
       case 'ArrowRight':
@@ -122,7 +136,7 @@ window.addEventListener('keydown', (event) => {
          enemy.lastkey = 'ArrowLeft'
         break
         case 'ArrowUp':
-         enemy.velocity.y = -10
+         enemy.velocity.y = -15
         break
   }
   console.log(event.key)
