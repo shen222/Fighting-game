@@ -9,7 +9,7 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 const gravity = 0.7
 
 class Sprite {
-    constructor({position, velocity, color ='red', offset}) {
+    constructor({position, velocity, color ='red', offset }) {
       this.position = position
       this.velocity = velocity
       this.width = 50
@@ -91,7 +91,7 @@ const enemy = new Sprite({
    },
    color: 'blue',
    offset: {
-    x: 0,
+    x: -50,
     y: 0
 }
    
@@ -113,6 +113,16 @@ const keys = {
     }
 
 }  
+
+function rectangularCollision ({ rectangle1, rectangle2 }) {
+    return ( 
+        rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x && 
+        rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width && 
+        rectangle1.attackBox.position.y + rectangle1.attackBox.Height >= rectangle2.position.y &&
+        rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height 
+         )
+ 
+}
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -140,14 +150,25 @@ function animate() {
 
     //Detect for collision
  if (
-    player.attackBox.position.x + player.attackBox.width >= enemy.position.x && 
-    player.attackBox.position.x <= enemy.position.x + enemy.width && 
-    player.attackBox.position.y + player.attackBox.Height >= enemy.position.y &&
-    player.attackBox.position.y <= enemy.position.y + enemy.height &&
+    rectangularCollision ({
+        rectangle1: player,
+        rectangle2: enemy
+    }) &&
     player.isAttacking
     ){
     player.isAttacking = false
     console.log('Go');
+}
+
+if (
+    rectangularCollision ({
+        rectangle1: enemy,
+        rectangle2: player
+    }) &&
+    enemy.isAttacking
+    ){
+    enemy.isAttacking = false
+    console.log('Enemy Attack');
 }
 
 }
@@ -183,6 +204,9 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowUp':
          enemy.velocity.y = -15
         break
+        case 'ArrowDown':
+            enemy.isAttacking = true
+           break
   }
   console.log(event.key)
 })
